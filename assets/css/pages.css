@@ -949,6 +949,106 @@
   line-height: 1.4;
 }
 
+/* ================================================================
+   GALLERY LIGHTBOX
+   Fresh ".lb" namespace so nothing can collide with older rules.
+   Uses display none/flex rather than opacity+visibility, and no
+   backdrop-filter (it creates a stacking context that can hide siblings).
+   ================================================================ */
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 74px 16px;
+  background: rgba(6, 4, 2, 0.97);
+  overscroll-behavior: contain;
+}
+
+.lb.is-open { display: flex; }
+
+.lb-img {
+  display: block;
+  max-width: min(1200px, calc(100vw - 32px));
+  /* dvh keeps the image inside the visible area on mobile */
+  max-height: calc(100vh - 148px);
+  max-height: calc(100dvh - 148px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lb-btn {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  background: rgba(20, 14, 9, 0.72);
+  color: #fff;
+  cursor: pointer;
+  /* Only background transitions: a transform here would fight the
+     translateY used to centre the prev/next buttons */
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.lb-btn:hover {
+  background: rgba(196, 136, 46, 0.4);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.lb-btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.lb-prev { top: 50%; left: 14px;  transform: translateY(-50%); }
+.lb-next { top: 50%; right: 14px; transform: translateY(-50%); }
+.lb-close { top: 14px; right: 14px; width: 46px; height: 46px; }
+
+.lb-count {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 7px 15px;
+  border-radius: 999px;
+  background: rgba(20, 14, 9, 0.8);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Clickable tiles should say so */
+.proj-item { cursor: zoom-in; }
+
+@media (max-width: 700px) {
+  .lb { padding: 64px 10px; }
+
+  .lb-img { max-height: calc(100dvh - 132px); }
+
+  .lb-btn { width: 44px; height: 44px; }
+
+  .lb-prev { left: 8px; }
+  .lb-next { right: 8px; }
+  .lb-close { top: 10px; right: 10px; width: 40px; height: 40px; }
+
+  .lb-count { bottom: 14px; font-size: 0.74rem; }
+}
+
 /* ── Page CTA ── */
 .page-cta {
   background:
