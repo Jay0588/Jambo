@@ -66,14 +66,14 @@ window.addEventListener("DOMContentLoaded", () => {
     "h06-badge":"Ziara ya Tovuti Bure · Kupima na Bei · Mombasa na Nchi Yote",
     "brands-h2":"Bidhaa tunazohifadhi na kusambaza.",
     "brands-sub":"Hizi ndizo bidhaa utakazozipata kwenye rafu zetu. Zote ni za kweli.",
-    "why-label":"Kwa Nini Jambo Wood Works","why-h2":"Miaka 40 ya kazi ya kweli.",
+    "why-label":"Kwa Nini Jambo Wood Works LTD","why-h2":"Miaka 40 ya kazi ya kweli.",
     "why1-h3":"Biashara ya Familia Tangu 1984",
     "why1-p":"Tulianzishwa mwaka 1984 na familia ya Jambo. Wateja wengi wetu wanarudia.",
     "why2-h3":"Vifaa Vizuri","why2-p":"Tunatumia mbao na vifaa vinavyofaa kwa kila kazi. Hakuna njia za mkato.",
     "why3-h3":"Utaridhika au Tunarudi","why3-p":"Kama kuna tatizo, tunarudi kulirekebisha. Hakuna mabishano.",
     "why4-h3":"Bei ya Haki","why4-p":"Tunakupa bei wazi kabla hatujaanza. Hakuna mshangao mwishoni.",
     "about-label":"Kuhusu Sisi","about-h2":"Useremala na vifaa,<br>vilivyofanywa vizuri.",
-    "about-p1":"Jambo Wood Works Ltd imekuwa ikifanya kazi tangu 1984. Tunafanya aina zote za useremala — milango, madirisha, makabati, majiko, samani za ofisi — pamoja na duka la jumla na rejareja la vifaa.",
+    "about-p1":"Jambo Wood Works LTD imekuwa ikifanya kazi tangu 1984. Tunafanya aina zote za useremala — milango, madirisha, makabati, majiko, samani za ofisi — pamoja na duka la jumla na rejareja la vifaa.",
     "about-p2":"Tuna karakana kamili ya mbao na duka lenye mbao, rangi, vigae, vifaa vya bomba, kemikali za ujenzi, na zaidi.",
     "about-p3":"Tupate kwenye <strong>Barabara Kuu ya Nyali / Barabara ya Fidel Odinga, Kongowea, Mombasa</strong> — kabla ya mlango wa Soko la Kongowea.",
     "about-badge-span":"Miaka ya Kongowea",
@@ -89,7 +89,7 @@ window.addEventListener("DOMContentLoaded", () => {
     "form-success-txt":"Ujumbe umepokelewa. Tutawasiliana nawe ndani ya masaa 24.",
     "form-error-txt":"Kuna hitilafu. Piga simu moja kwa moja +254 733 474 216.",
     "footer-brand-p":"Tumekuwa tukifanya useremala na kuuza vifaa Kongowea, Mombasa tangu 1984.",
-    "footer-copyright":"© 2026 Jambo Wood Works Ltd. Haki zote zimehifadhiwa.",
+    "footer-copyright":"© 2026 Jambo Wood Works LTD. Haki zote zimehifadhiwa.",
     "footer-location":"Kongowea, Mombasa, Kenya",
 
     // ── Hardware page ─────────────────────────────────────────────
@@ -116,7 +116,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // ── About page ────────────────────────────────────────────────
     "ab-label":        "Hadithi Yetu",
     "ab-h1":           "Imejengwa kwa shauku.<br><em>Inaongozwa na lengo.</em>",
-    "ab-hero-p":       "Jambo Wood Works ilianza mwaka 1984 kwa imani rahisi – kazi nzuri, huduma ya uaminifu, na wateja wenye furaha. Kutoka karakana ndogo Mombasa, tumekua kwa kuaminiwa na vizazi.",
+    "ab-hero-p":       "Jambo Wood Works LTD ilianza mwaka 1984 kwa imani rahisi – kazi nzuri, huduma ya uaminifu, na wateja wenye furaha. Kutoka karakana ndogo Mombasa, tumekua kwa kuaminiwa na vizazi.",
     "ab-stat1-lbl":    "Miaka ya<br>Uzoefu",
     "ab-stat2-lbl":    "Wateja<br>Walioridhika",
     "ab-stat3-lbl":    "Miradi<br>Iliyokamilika",
@@ -424,6 +424,136 @@ window.addEventListener("DOMContentLoaded", () => {
   })();
 
   /* ================================================================
+     GALLERY LIGHTBOX
+     Click a tile to enlarge; arrows / keyboard / swipe to move between
+     images. Only images visible under the current filter are included.
+     ================================================================ */
+  (function initGalleryLightbox() {
+    const TILE = ".proj-item";
+    if (!document.querySelector(`${TILE} img`)) return;
+
+    const icon = (d) =>
+      `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+
+    const box = document.createElement("div");
+    box.className = "lb";
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", "Image viewer");
+    // No src attribute: an empty src resolves against the page URL and fires a
+    // stray request, and reports as a broken image until one is chosen.
+    box.innerHTML =
+      `<img class="lb-img" alt="" />` +
+      `<button class="lb-btn lb-prev" type="button" aria-label="Previous image">${icon('<polyline points="15 18 9 12 15 6"/>')}</button>` +
+      `<button class="lb-btn lb-next" type="button" aria-label="Next image">${icon('<polyline points="9 18 15 12 9 6"/>')}</button>` +
+      `<button class="lb-btn lb-close" type="button" aria-label="Close viewer">${icon('<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>')}</button>` +
+      `<div class="lb-count"></div>`;
+    document.body.appendChild(box);
+
+    const imgEl   = box.querySelector(".lb-img");
+    const prevBtn = box.querySelector(".lb-prev");
+    const nextBtn = box.querySelector(".lb-next");
+    const closeBtn= box.querySelector(".lb-close");
+    const countEl = box.querySelector(".lb-count");
+
+    let shots = [];      // the currently visible images
+    let at = 0;
+    let opener = null;   // element to restore focus to on close
+
+    // offsetParent is null when the filter has set display:none on the tile
+    const collect = () =>
+      Array.from(document.querySelectorAll(`${TILE} img`))
+           .filter((im) => im.closest(TILE).offsetParent !== null);
+
+    const preload = (i) => {
+      const im = shots[i];
+      if (im) { const p = new Image(); p.src = im.currentSrc || im.src; }
+    };
+
+    const show = () => {
+      const im = shots[at];
+      if (!im) return;
+      imgEl.src = im.currentSrc || im.src;
+      imgEl.alt = im.alt || "";
+      countEl.textContent = `${at + 1} / ${shots.length}`;
+      const many = shots.length > 1;
+      prevBtn.hidden = nextBtn.hidden = !many;
+      // fetch neighbours so arrow presses feel instant
+      preload((at + 1) % shots.length);
+      preload((at - 1 + shots.length) % shots.length);
+    };
+
+    const step = (d) => {
+      if (!shots.length) return;
+      at = (at + d + shots.length) % shots.length;   // wraps at both ends
+      show();
+    };
+
+    const open = (im) => {
+      shots = collect();
+      at = shots.indexOf(im);
+      if (at < 0) { shots = [im]; at = 0; }
+      opener = document.activeElement;
+      show();
+      box.classList.add("is-open");
+      // Lock scroll on <html> only. Setting position:fixed on <body> would
+      // break the fixed positioning of this overlay's own children.
+      document.documentElement.style.overflow = "hidden";
+      closeBtn.focus({ preventScroll: true });
+    };
+
+    const close = () => {
+      box.classList.remove("is-open");
+      document.documentElement.style.overflow = "";
+      imgEl.removeAttribute("src");
+      if (opener && typeof opener.focus === "function") opener.focus({ preventScroll: true });
+    };
+
+    // Delegated: survives filtering, and no per-tile listeners to rebind
+    document.addEventListener("click", (e) => {
+      if (box.contains(e.target)) return;
+      const im = e.target.closest(`${TILE} img`);
+      if (!im) return;
+      e.preventDefault();
+      open(im);
+    });
+
+    prevBtn.addEventListener("click", (e) => { e.stopPropagation(); step(-1); });
+    nextBtn.addEventListener("click", (e) => { e.stopPropagation(); step(1); });
+    closeBtn.addEventListener("click", (e) => { e.stopPropagation(); close(); });
+
+    // Backdrop only — clicks on the image or buttons must not close
+    box.addEventListener("click", (e) => { if (e.target === box) close(); });
+
+    document.addEventListener("keydown", (e) => {
+      if (!box.classList.contains("is-open")) return;
+      if (e.key === "Escape")     { e.preventDefault(); close(); }
+      if (e.key === "ArrowLeft")  { e.preventDefault(); step(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+    });
+
+    // Swipe on touch devices
+    let sx = 0, sy = 0, tracking = false;
+    box.addEventListener("touchstart", (e) => {
+      if (e.touches.length !== 1) { tracking = false; return; }
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true;
+    }, { passive: true });
+    box.addEventListener("touchend", (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    // Reopening after a filter change must re-read what is visible
+    document.querySelectorAll(".proj-filter").forEach((b) =>
+      b.addEventListener("click", () => { if (box.classList.contains("is-open")) close(); })
+    );
+  })();
+
+  /* ================================================================
      CONTACT FORM
      ================================================================ */
   const contactForm = document.querySelector("[data-contact-form]");
@@ -477,7 +607,7 @@ window.addEventListener("DOMContentLoaded", () => {
         "Message:",
         message || "-",
         "",
-        "— Sent from the Jambo Wood Works website",
+        "— Sent from the Jambo Wood Works LTD website",
       ].join("\r\n");
 
       return { subject, body };
