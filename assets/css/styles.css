@@ -44,18 +44,15 @@ body {
   animation: pageIn 0.4s ease forwards;
 }
 
-/* Deliberately opacity-only. Animating transform on <body> leaves a computed
-   matrix(1,0,0,1,0,0), and any transform other than `none` makes the element a
-   containing block for position:fixed descendants — which sized fixed overlays
-   to the full document height instead of the viewport. */
 @keyframes pageIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
 }
 
 body.is-leaving {
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transform: translateY(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 body.menu-open { overflow: hidden; }
@@ -241,68 +238,30 @@ h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spac
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
-  padding: 6px 18px 6px 8px;
+  gap: 10px;
+  padding: 8px 18px 8px 10px;
   flex-shrink: 0;
   text-decoration: none;
-  border-right: 1px solid rgba(255,255,255,0.14);
+  border-right: 1px solid rgba(255,255,255,0.1);
   position: static;
 }
 .brand::before { display: none; }
-/* Gold-ringed medallion. The ring is a box-shadow rather than a border so it
-   sits outside the circle without shrinking the artwork inside. */
 .brand-logo-wrap {
-  width: 40px; height: 40px;
+  width: 36px; height: 36px;
   border-radius: 50%;
   overflow: hidden; background: #fff;
   display: grid; place-items: center; flex-shrink: 0;
-  border: 1.5px solid var(--gold);
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
 }
-.brand-logo-wrap img { width: 38px; height: 38px; object-fit: contain; }
-
-.brand-text { display: grid; justify-items: center; line-height: 1.15; }
-
-/* Plus Jakarta Sans rather than Syne: Syne's letterforms are very wide, which
-   made the wordmark read as stretched. Already loaded, so no extra request. */
+.brand-logo-wrap img { width: 32px; height: 32px; object-fit: contain; }
+.brand-text { display: grid; line-height: 1.2; }
 .brand-text strong {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-size: 1.16rem; font-weight: 800; color: #fff; letter-spacing: -0.03em;
-  white-space: nowrap;   /* the longer "LTD" name must not wrap in the pill */
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 0.84rem; font-weight: 800; color: #fff; letter-spacing: -0.01em;
 }
-
-/* Hairline rule with three diamond ornaments, drawn entirely in CSS so no
-   special characters are needed in the markup */
-.brand-rule {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 100%;
-  margin: 3px 0 2px;
-}
-.brand-rule::before,
-.brand-rule::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(196,136,46,0.75));
-}
-.brand-rule::after {
-  background: linear-gradient(90deg, rgba(196,136,46,0.75), transparent);
-}
-.brand-rule span {
-  width: 3px; height: 3px;
-  flex-shrink: 0;
-  background: var(--gold);
-  transform: rotate(45deg);
-}
-.brand-rule span:nth-child(2) { width: 4px; height: 4px; }
-
 .brand-text small {
-  font-size: 0.57rem; color: var(--gold);
-  letter-spacing: 0.13em; text-transform: uppercase; font-weight: 700;
-  white-space: nowrap;
+  font-size: 0.54rem; color: var(--gold);
+  letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
 }
 
 /* Desktop nav */
@@ -378,19 +337,11 @@ h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spac
 /* Mobile menu — matches screenshot: brand top-left, X top-right, centered nav, full CTA bottom */
 .mobile-menu {
   position: fixed; z-index: 190; inset: 0;
-  /* inset:0 on a fixed element resolves against the LAYOUT viewport, which on
-     mobile is taller than the visible area while the address bar shows — that
-     pushed the centred nav links below the fold. dvh tracks the visible
-     viewport; the vh line is the fallback for older browsers. */
-  height: 100vh;
-  height: 100dvh;
-  max-height: 100dvh;
   display: flex; flex-direction: column;
   background: #0e0b08;
   opacity: 0; pointer-events: none; transform: translateX(100%);
   transition: opacity 260ms ease, transform 300ms cubic-bezier(0.76,0,0.24,1);
   color: #fff; overflow: hidden;
-  overscroll-behavior: contain;
 }
 .menu-open .mobile-menu { opacity: 1; pointer-events: auto; transform: none; }
 
@@ -409,10 +360,9 @@ h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spac
   background: #fff; padding: 3px; object-fit: contain; flex-shrink: 0;
 }
 .mm-brand div { display: grid; line-height: 1.25; }
-/* matches the header lockup */
 .mm-brand strong {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-size: 0.94rem; font-weight: 800; color: #fff; letter-spacing: -0.03em;
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 0.9rem; font-weight: 800; color: #fff;
 }
 .mm-brand small {
   font-size: 0.58rem; color: var(--gold);
@@ -448,33 +398,15 @@ h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spac
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; flex: 1;
   padding: 0 24px; gap: 0;
-  /* Safety net for short screens (landscape phones): scroll the list itself
-     rather than letting it overflow the panel */
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
 }
 .mm-nav a {
   font-family: 'Syne', system-ui, sans-serif;
-  font-size: clamp(1.6rem, 6vw, 2.4rem);
-  line-height: 1.2;
+  font-size: clamp(1.9rem, 7vw, 2.6rem);
   font-weight: 700; color: rgba(255,255,255,0.55);
-  padding: 9px 20px; text-align: center; width: 100%;
+  padding: 10px 20px; text-align: center; width: 100%;
   border-radius: 10px; letter-spacing: -0.01em;
   transition: color 160ms, background 160ms;
   text-decoration: none; display: block;
-  flex-shrink: 0;
-}
-
-/* Landscape / very short viewports: tighten so everything still fits */
-@media (max-height: 620px) {
-  .mm-top { padding: 12px 20px 10px; }
-  .mm-brand img { width: 36px; height: 36px; }
-  .mm-lang { padding: 8px 20px 0; }
-  .mm-nav a { font-size: clamp(1.15rem, 4.5vw, 1.5rem); padding: 6px 20px; }
-  .mm-footer { padding: 10px 20px 16px; }
-  .mm-cta { height: 46px; font-size: 0.92rem; }
 }
 .mm-nav a:hover, .mm-nav a.active {
   color: #fff;
@@ -497,23 +429,6 @@ h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spac
   transition: filter 160ms, transform 160ms;
 }
 .mm-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
-
-/* Brand scales down on narrow phones so it cannot collide with the hamburger */
-@media (max-width: 430px) {
-  .brand { gap: 9px; padding: 6px 8px 6px 6px; }
-  .brand-logo-wrap { width: 36px; height: 36px; }
-  .brand-logo-wrap img { width: 34px; height: 34px; }
-  .brand-text strong { font-size: 0.95rem; }
-  .brand-text small { font-size: 0.5rem; letter-spacing: 0.11em; }
-  .brand-rule { margin: 2px 0 1px; }
-}
-
-@media (max-width: 360px) {
-  .brand-logo-wrap { width: 32px; height: 32px; }
-  .brand-logo-wrap img { width: 30px; height: 30px; }
-  .brand-text strong { font-size: 0.86rem; }
-  .brand-text small { font-size: 0.46rem; letter-spacing: 0.09em; }
-}
 
 /* Keep old classes working if referenced anywhere */
 .mobile-cta { display: none; }
@@ -575,6 +490,21 @@ h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spac
 .ws-slide[data-anim="slide-up"] .ws-slide-img img,
 .ws-slide[data-anim="wipe-left"] .ws-slide-img img {
   object-position: center 20%;
+}
+
+/* ================================================================
+   WORKSHOP VIDEO
+   ================================================================ */
+
+.ws-slide-img video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
 }
 
 /* -- Dark overlay -- cinematic */
@@ -1819,9 +1749,6 @@ html, body { max-width: 100%; overflow-x: hidden; }
   .menu-toggle { display: inline-flex; }
   .nav-phone, .nav-divider { display: none; }
 
-  /* No nav links competing for room, so the brand can breathe */
-  .brand { border-right: 0; padding-right: 10px; }
-
   .why-grid { grid-template-columns: repeat(2, 1fr); }
   .about-inner { grid-template-columns: 1fr; }
   .about-image-stack { display: none; }
@@ -2384,9 +2311,9 @@ html, body { max-width: 100%; overflow-x: hidden; }
 
 /* Card */
 .review-card {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 14px;
-  align-content: start;
   padding: 24px;
   border: 1.5px solid var(--line);
   border-radius: 20px;
@@ -2414,6 +2341,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
   line-height: 1.7;
   margin: 0;
   font-style: italic;
+  flex: 1;
 }
 
 /* Author row */
@@ -2421,7 +2349,8 @@ html, body { max-width: 100%; overflow-x: hidden; }
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 4px;
+  margin-top: auto;
+  padding-top: 4px;
 }
 
 .review-avatar {
