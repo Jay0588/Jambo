@@ -1,21 +1,5 @@
 "use strict";
 
-/* ================================================================
-   PAGE TRANSITIONS — fade out on leave, fade in on arrive
-   ================================================================ */
-document.addEventListener("click", (e) => {
-  const link = e.target.closest("a");
-  if (!link) return;
-  const href = link.getAttribute("href");
-  // Only internal page links (.html), not anchors, external, or whatsapp
-  if (!href || href.startsWith("#") || href.startsWith("http") ||
-      href.startsWith("tel:") || href.startsWith("mailto:") ||
-      link.target === "_blank" || !href.endsWith(".html")) return;
-  e.preventDefault();
-  document.body.classList.add("is-leaving");
-  setTimeout(() => { window.location.href = href; }, 260);
-});
-
 window.addEventListener("DOMContentLoaded", () => {
 
   /* ================================================================
@@ -66,14 +50,14 @@ window.addEventListener("DOMContentLoaded", () => {
     "h06-badge":"Ziara ya Tovuti Bure · Kupima na Bei · Mombasa na Nchi Yote",
     "brands-h2":"Bidhaa tunazohifadhi na kusambaza.",
     "brands-sub":"Hizi ndizo bidhaa utakazozipata kwenye rafu zetu. Zote ni za kweli.",
-    "why-label":"Kwa Nini Jambo Wood Works LTD","why-h2":"Miaka 40 ya kazi ya kweli.",
+    "why-label":"Kwa Nini Jambo Wood Works","why-h2":"Miaka 40 ya kazi ya kweli.",
     "why1-h3":"Biashara ya Familia Tangu 1984",
     "why1-p":"Tulianzishwa mwaka 1984 na familia ya Jambo. Wateja wengi wetu wanarudia.",
     "why2-h3":"Vifaa Vizuri","why2-p":"Tunatumia mbao na vifaa vinavyofaa kwa kila kazi. Hakuna njia za mkato.",
     "why3-h3":"Utaridhika au Tunarudi","why3-p":"Kama kuna tatizo, tunarudi kulirekebisha. Hakuna mabishano.",
     "why4-h3":"Bei ya Haki","why4-p":"Tunakupa bei wazi kabla hatujaanza. Hakuna mshangao mwishoni.",
     "about-label":"Kuhusu Sisi","about-h2":"Useremala na vifaa,<br>vilivyofanywa vizuri.",
-    "about-p1":"Jambo Wood Works LTD imekuwa ikifanya kazi tangu 1984. Tunafanya aina zote za useremala — milango, madirisha, makabati, majiko, samani za ofisi — pamoja na duka la jumla na rejareja la vifaa.",
+    "about-p1":"Jambo Wood Works Ltd imekuwa ikifanya kazi tangu 1984. Tunafanya aina zote za useremala — milango, madirisha, makabati, majiko, samani za ofisi — pamoja na duka la jumla na rejareja la vifaa.",
     "about-p2":"Tuna karakana kamili ya mbao na duka lenye mbao, rangi, vigae, vifaa vya bomba, kemikali za ujenzi, na zaidi.",
     "about-p3":"Tupate kwenye <strong>Barabara Kuu ya Nyali / Barabara ya Fidel Odinga, Kongowea, Mombasa</strong> — kabla ya mlango wa Soko la Kongowea.",
     "about-badge-span":"Miaka ya Kongowea",
@@ -89,16 +73,13 @@ window.addEventListener("DOMContentLoaded", () => {
     "form-success-txt":"Ujumbe umepokelewa. Tutawasiliana nawe ndani ya masaa 24.",
     "form-error-txt":"Kuna hitilafu. Piga simu moja kwa moja +254 733 474 216.",
     "footer-brand-p":"Tumekuwa tukifanya useremala na kuuza vifaa Kongowea, Mombasa tangu 1984.",
-    "footer-copyright":"© 2026 Jambo Wood Works LTD. Haki zote zimehifadhiwa.",
+    "footer-copyright":"© 2026 Jambo Wood Works Ltd. Haki zote zimehifadhiwa.",
     "footer-location":"Kongowea, Mombasa, Kenya",
 
     // ── Hardware page ─────────────────────────────────────────────
-    "hw-label":        "Mkusanyiko wa Vifaa",
-    "hw-h1":           "Vifaa vinavyoshikilia<br>kila kitu<br><em>pamoja.</em>",
-    "hw-hero-p":       "Kutoka mbao na rangi hadi gundi, vigae na mabomba — kila bidhaa tunayohifadhi imechaguliwa kwa nguvu, udumu na umaliziaji unaodumu.",
-    "hw-quote":        "Mbao nzuri inahitaji vifaa bora zaidi.",
-    "hw-detail-h":     "Kila kitu<br>ni muhimu",
-    "hw-detail-p":     "Tazama bidhaa zetu zote dukani.",
+    "hw-label":        "Duka la Vifaa",
+    "hw-h1":           "Tunachohifadhi.",
+    "hw-hero-p":       "Jumla na rejareja — mbao, rangi, gundi, bomba, vigae, kemikali za ujenzi na zaidi. Ingia au uulize kwa simu.",
     "hw-cat-label":    "Aina za Bidhaa",
     "hw-cat-h2":       "Kila kitu kwa kazi.",
     "hw-note":         "Hatuna duka la mtandaoni — bei, hesabu ya bidhaa, na upatikanaji hubadilika kila siku. Tupigie simu au uje.",
@@ -114,18 +95,9 @@ window.addEventListener("DOMContentLoaded", () => {
     "pr-cta-p":   "Tutumia vipimo vyako au maelezo mafupi na tutakupa bei ndani ya masaa 24.",
 
     // ── About page ────────────────────────────────────────────────
-    "ab-label":        "Hadithi Yetu",
-    "ab-h1":           "Imejengwa kwa shauku.<br><em>Inaongozwa na lengo.</em>",
-    "ab-hero-p":       "Jambo Wood Works LTD ilianza mwaka 1984 kwa imani rahisi – kazi nzuri, huduma ya uaminifu, na wateja wenye furaha. Kutoka karakana ndogo Mombasa, tumekua kwa kuaminiwa na vizazi.",
-    "ab-stat1-lbl":    "Miaka ya<br>Uzoefu",
-    "ab-stat2-lbl":    "Wateja<br>Walioridhika",
-    "ab-stat3-lbl":    "Miradi<br>Iliyokamilika",
-    "ab-stat4-lbl":    "Ahadi ya<br>Ubora",
-    "ab-journey-label":"Safari Yetu",
-    "ab-values-label": "Maadili Yetu",
-    "ab-values-h":     "Uaminifu. Ubora. Heshima.",
-    "ab-values-p":     "Tunaamini katika kufanya mambo kwa njia sahihi — kutumia vifaa bora, ufundi wa hali ya juu, na kumtendea kila mteja kama familia. Hilo ndilo lililotufanya tuendelee kwa miaka zaidi ya 40.",
-    "ab-values-sign":  "Familia ya Jambo",
+    "ab-label":        "Kuhusu Sisi",
+    "ab-h1":           "Biashara ya familia.<br>Miaka 40 ndani.",
+    "ab-hero-p":       "Tulianzishwa mwaka 1984, bado Kongowea, bado familia ile ile. Tunafanya useremala, usambazaji wa vifaa, ukataji wa CNC, na upakaji rangi chini ya paa moja.",
     "ab-story-label":  "Hadithi Yetu",
     "ab-story-h2":     "Useremala na vifaa,<br>vilivyofanywa vizuri.",
     "ab-svc-label":    "Tunachofanya",
@@ -134,10 +106,10 @@ window.addEventListener("DOMContentLoaded", () => {
     "ab-cta-p":        "Tupigie simu, WhatsApp, au uje dukani. Tuko wazi Jumatatu hadi Jumamosi, saa mbili asubuhi hadi saa kumi na mbili jioni.",
 
     // ── Contact page ──────────────────────────────────────────────
-    "co-label":    "Tuwasiliane",
-    "co-h1":       "Tungependa<br><em>kusikia</em> kutoka kwako.",
-    "co-hero-p":   "Una mradi akilini au unahitaji ushauri wa kitaalamu? Timu yetu ipo hapa kukusaidia kufanikisha mawazo yako kwa usahihi na uangalifu.",
-    "co-form-h3":  "Wasiliana Nasi",
+    "co-label":    "Wasiliana Nasi",
+    "co-h1":       "Tuambie unachohitaji.",
+    "co-hero-p":   "Tunajibu ndani ya masaa 24. Au piga simu tu — tunapatikana Jumatatu hadi Jumamosi, saa 2 asubuhi hadi saa 12 jioni.",
+    "co-form-h3":  "Tuma Ombi",
     "co-form-sub": "Jaza fomu na tutawasiliana nawe ndani ya masaa 24.",
   };
 
@@ -195,12 +167,26 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const closeMenu = () => {
     document.body.classList.remove("menu-open");
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
+    window.scrollTo(0, scrollY);
     menuToggles.forEach(t => t.setAttribute("aria-expanded", "false"));
   };
 
   menuToggles.forEach(btn => {
     btn.addEventListener("click", () => {
       const isOpen = document.body.classList.toggle("menu-open");
+      if (isOpen) {
+        const scrollY = window.scrollY;
+        document.body.dataset.scrollY = scrollY;
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = "100%";
+      } else {
+        closeMenu();
+      }
       menuToggles.forEach(t => t.setAttribute("aria-expanded", String(isOpen)));
     });
   });
@@ -375,189 +361,11 @@ window.addEventListener("DOMContentLoaded", () => {
   })();
 
   /* ================================================================
-     GALLERY HERO CAROUSEL
-     ================================================================ */
-  (function initGalleryHeroCarousel() {
-    const stage = document.querySelector("[data-gallery-carousel]");
-    if (!stage) return;
-
-    const cards = Array.from(stage.querySelectorAll(".gallery-hero-card"));
-    if (cards.length < 3) return;
-
-    const SLOTS = ["is-center", "is-left", "is-right", "is-off-left", "is-off-right"];
-    const STEP_DELAY = 2000;
-    const total = cards.length;
-    let current = 0;
-
-    // Assign each card a slot based on how far it sits from the centred card.
-    const layout = () => {
-      cards.forEach((card, i) => {
-        const offset = (i - current + total) % total;
-        let slot;
-        if (offset === 0) slot = "is-center";
-        else if (offset === 1) slot = "is-right";
-        else if (offset === total - 1) slot = "is-left";
-        // Everything else waits off-stage on whichever side it will enter from.
-        else slot = offset <= total / 2 ? "is-off-right" : "is-off-left";
-
-        SLOTS.forEach((s) => card.classList.toggle(s, s === slot));
-      });
-    };
-
-    layout();
-
-    const advance = () => {
-      current = (current + 1) % total;
-      layout();
-    };
-
-    let timer = setInterval(advance, STEP_DELAY);
-    const stop = () => { clearInterval(timer); timer = null; };
-    const start = () => { if (!timer) timer = setInterval(advance, STEP_DELAY); };
-
-    // Don't animate against the user, and don't burn cycles on a hidden tab.
-    stage.addEventListener("mouseenter", stop);
-    stage.addEventListener("mouseleave", start);
-    document.addEventListener("visibilitychange", () => {
-      document.hidden ? stop() : start();
-    });
-  })();
-
-  /* ================================================================
-     GALLERY LIGHTBOX
-     Click a tile to enlarge; arrows / keyboard / swipe to move between
-     images. Only images visible under the current filter are included.
-     ================================================================ */
-  (function initGalleryLightbox() {
-    const TILE = ".proj-item";
-    if (!document.querySelector(`${TILE} img`)) return;
-
-    const icon = (d) =>
-      `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
-
-    const box = document.createElement("div");
-    box.className = "lb";
-    box.setAttribute("role", "dialog");
-    box.setAttribute("aria-modal", "true");
-    box.setAttribute("aria-label", "Image viewer");
-    // No src attribute: an empty src resolves against the page URL and fires a
-    // stray request, and reports as a broken image until one is chosen.
-    box.innerHTML =
-      `<img class="lb-img" alt="" />` +
-      `<button class="lb-btn lb-prev" type="button" aria-label="Previous image">${icon('<polyline points="15 18 9 12 15 6"/>')}</button>` +
-      `<button class="lb-btn lb-next" type="button" aria-label="Next image">${icon('<polyline points="9 18 15 12 9 6"/>')}</button>` +
-      `<button class="lb-btn lb-close" type="button" aria-label="Close viewer">${icon('<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>')}</button>` +
-      `<div class="lb-count"></div>`;
-    document.body.appendChild(box);
-
-    const imgEl   = box.querySelector(".lb-img");
-    const prevBtn = box.querySelector(".lb-prev");
-    const nextBtn = box.querySelector(".lb-next");
-    const closeBtn= box.querySelector(".lb-close");
-    const countEl = box.querySelector(".lb-count");
-
-    let shots = [];      // the currently visible images
-    let at = 0;
-    let opener = null;   // element to restore focus to on close
-
-    // offsetParent is null when the filter has set display:none on the tile
-    const collect = () =>
-      Array.from(document.querySelectorAll(`${TILE} img`))
-           .filter((im) => im.closest(TILE).offsetParent !== null);
-
-    const preload = (i) => {
-      const im = shots[i];
-      if (im) { const p = new Image(); p.src = im.currentSrc || im.src; }
-    };
-
-    const show = () => {
-      const im = shots[at];
-      if (!im) return;
-      imgEl.src = im.currentSrc || im.src;
-      imgEl.alt = im.alt || "";
-      countEl.textContent = `${at + 1} / ${shots.length}`;
-      const many = shots.length > 1;
-      prevBtn.hidden = nextBtn.hidden = !many;
-      // fetch neighbours so arrow presses feel instant
-      preload((at + 1) % shots.length);
-      preload((at - 1 + shots.length) % shots.length);
-    };
-
-    const step = (d) => {
-      if (!shots.length) return;
-      at = (at + d + shots.length) % shots.length;   // wraps at both ends
-      show();
-    };
-
-    const open = (im) => {
-      shots = collect();
-      at = shots.indexOf(im);
-      if (at < 0) { shots = [im]; at = 0; }
-      opener = document.activeElement;
-      show();
-      box.classList.add("is-open");
-      // Lock scroll on <html> only. Setting position:fixed on <body> would
-      // break the fixed positioning of this overlay's own children.
-      document.documentElement.style.overflow = "hidden";
-      closeBtn.focus({ preventScroll: true });
-    };
-
-    const close = () => {
-      box.classList.remove("is-open");
-      document.documentElement.style.overflow = "";
-      imgEl.removeAttribute("src");
-      if (opener && typeof opener.focus === "function") opener.focus({ preventScroll: true });
-    };
-
-    // Delegated: survives filtering, and no per-tile listeners to rebind
-    document.addEventListener("click", (e) => {
-      if (box.contains(e.target)) return;
-      const im = e.target.closest(`${TILE} img`);
-      if (!im) return;
-      e.preventDefault();
-      open(im);
-    });
-
-    prevBtn.addEventListener("click", (e) => { e.stopPropagation(); step(-1); });
-    nextBtn.addEventListener("click", (e) => { e.stopPropagation(); step(1); });
-    closeBtn.addEventListener("click", (e) => { e.stopPropagation(); close(); });
-
-    // Backdrop only — clicks on the image or buttons must not close
-    box.addEventListener("click", (e) => { if (e.target === box) close(); });
-
-    document.addEventListener("keydown", (e) => {
-      if (!box.classList.contains("is-open")) return;
-      if (e.key === "Escape")     { e.preventDefault(); close(); }
-      if (e.key === "ArrowLeft")  { e.preventDefault(); step(-1); }
-      if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
-    });
-
-    // Swipe on touch devices
-    let sx = 0, sy = 0, tracking = false;
-    box.addEventListener("touchstart", (e) => {
-      if (e.touches.length !== 1) { tracking = false; return; }
-      sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true;
-    }, { passive: true });
-    box.addEventListener("touchend", (e) => {
-      if (!tracking) return;
-      tracking = false;
-      const dx = e.changedTouches[0].clientX - sx;
-      const dy = e.changedTouches[0].clientY - sy;
-      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
-    }, { passive: true });
-
-    // Reopening after a filter change must re-read what is visible
-    document.querySelectorAll(".proj-filter").forEach((b) =>
-      b.addEventListener("click", () => { if (box.classList.contains("is-open")) close(); })
-    );
-  })();
-
-  /* ================================================================
      CONTACT FORM
      ================================================================ */
   const contactForm = document.querySelector("[data-contact-form]");
   if (contactForm) {
+    const submitBtn      = contactForm.querySelector(".form-submit");
     const successMsg     = contactForm.querySelector(".form-success");
     const errorMsg       = contactForm.querySelector(".form-error");
     const requiredFields = contactForm.querySelectorAll("[required]");
@@ -574,125 +382,32 @@ window.addEventListener("DOMContentLoaded", () => {
     };
     requiredFields.forEach((el) => el.addEventListener("input", () => setInvalid(el, false)));
 
-    /* Opens a prefilled Gmail compose window in the browser. Nothing is sent
-       server-side, so no form backend is needed. Gmail-in-the-browser is the
-       primary route because it works without an OS mail handler registered —
-       a desktop mailto: often fails silently. The success panel still offers
-       mailto, clipboard and WhatsApp as alternatives. */
-    const COMPANY_EMAIL = "jamboww.ltd@gmail.com";
-
-    const fieldValue = (name) => {
-      const el = contactForm.querySelector(`[name="${name}"]`);
-      return el && el.value ? el.value.trim() : "";
-    };
-
-    const buildEnquiry = () => {
-      const name    = fieldValue("name");
-      const phone   = fieldValue("phone");
-      const email   = fieldValue("email");
-      const service = fieldValue("service");
-      const message = fieldValue("message");
-
-      const subject = service
-        ? `Enquiry: ${service}${name ? ` — ${name}` : ""}`
-        : `Website enquiry${name ? ` — ${name}` : ""}`;
-
-      // CRLF keeps line breaks intact across mail clients
-      const body = [
-        `Name:    ${name || "-"}`,
-        `Phone:   ${phone || "-"}`,
-        `Email:   ${email || "-"}`,
-        `Service: ${service || "-"}`,
-        "",
-        "Message:",
-        message || "-",
-        "",
-        "— Sent from the Jambo Wood Works LTD website",
-      ].join("\r\n");
-
-      return { subject, body };
-    };
-
-    const buildGmail = ({ subject, body }) =>
-      "https://mail.google.com/mail/?view=cm&fs=1"
-      + `&to=${encodeURIComponent(COMPANY_EMAIL)}`
-      + `&su=${encodeURIComponent(subject)}`
-      + `&body=${encodeURIComponent(body)}`;
-
-    const buildMailto = ({ subject, body }) =>
-      `mailto:${COMPANY_EMAIL}`
-      + `?subject=${encodeURIComponent(subject)}`
-      + `&body=${encodeURIComponent(body)}`;
-
-    const gmailLink  = successMsg && successMsg.querySelector("[data-mail-gmail]");
-    const appLink    = successMsg && successMsg.querySelector("[data-mail-app]");
-    const copyBtn    = successMsg && successMsg.querySelector("[data-mail-copy]");
-    const statusText = successMsg && successMsg.querySelector("[data-mail-status]");
-
-    let lastEnquiry = null;
-
-    if (copyBtn) {
-      copyBtn.addEventListener("click", async () => {
-        if (!lastEnquiry) return;
-        const text = `${lastEnquiry.subject}\r\n\r\n${lastEnquiry.body}`;
-        const done = () => {
-          const original = copyBtn.textContent;
-          copyBtn.textContent = "Copied";
-          setTimeout(() => { copyBtn.textContent = original; }, 1800);
-        };
-        try {
-          await navigator.clipboard.writeText(text);
-          done();
-        } catch {
-          // clipboard API needs a secure context; fall back to a temp textarea
-          const ta = document.createElement("textarea");
-          ta.value = text;
-          ta.setAttribute("readonly", "");
-          ta.style.position = "fixed";
-          ta.style.opacity = "0";
-          document.body.appendChild(ta);
-          ta.select();
-          try { document.execCommand("copy"); done(); } catch {}
-          document.body.removeChild(ta);
-        }
-      });
-    }
-
-    contactForm.addEventListener("submit", (e) => {
+    contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      if (successMsg) successMsg.hidden = true;
-      if (errorMsg)   errorMsg.hidden = true;
-
-      if (!validate()) {
-        const firstBad = contactForm.querySelector(".is-invalid");
-        if (firstBad) firstBad.focus();
-        return;
-      }
-
-      lastEnquiry = buildEnquiry();
-      const gmailUrl = buildGmail(lastEnquiry);
-
-      // Keep every route in the panel current so any of them can be used
-      if (gmailLink) gmailLink.href = gmailUrl;
-      if (appLink)   appLink.href   = buildMailto(lastEnquiry);
-
-      // Submitting is a user gesture, so this should not trip popup blockers
-      const win = window.open(gmailUrl, "_blank", "noopener");
-
-      if (!win && statusText) {
-        statusText.textContent =
-          "Your browser blocked the new tab. Use Open Gmail below, or copy the details.";
-      }
-
-      // The form is deliberately left filled in, so nothing is lost if the
-      // visitor needs to reach us another way.
-      if (successMsg) {
-        successMsg.hidden = false;
-        successMsg.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      if (!validate()) return;
+      submitBtn.disabled = true;
+      submitBtn.classList.add("is-loading");
+      successMsg.hidden = errorMsg.hidden = true;
+      try {
+        const res = await fetch(contactForm.action, {
+          method: "POST",
+          body: new FormData(contactForm),
+          headers: { Accept: "application/json" },
+        });
+        if (res.ok) {
+          contactForm.reset();
+          successMsg.hidden = false;
+          successMsg.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        } else {
+          errorMsg.hidden = false;
+        }
+      } catch {
+        errorMsg.hidden = false;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove("is-loading");
       }
     });
   }
-
 
 });
