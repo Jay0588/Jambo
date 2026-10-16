@@ -254,14 +254,15 @@ h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spac
   border: 1px solid rgba(255,255,255,0.2);
 }
 .brand-logo-wrap img { width: 32px; height: 32px; object-fit: contain; }
-.brand-text { display: grid; line-height: 1.2; }
+.brand-text { display: grid; line-height: 1.15; }
 .brand-text strong {
-  font-family: 'Syne', system-ui, sans-serif;
-  font-size: 0.84rem; font-weight: 800; color: #fff; letter-spacing: -0.01em;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 0.75rem; font-weight: 800; color: #fff; letter-spacing: -0.02em;
 }
 .brand-text small {
-  font-size: 0.54rem; color: var(--gold);
-  letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.5rem; color: var(--gold);
+  letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
 }
 
 /* Desktop nav */
@@ -361,12 +362,13 @@ h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spac
 }
 .mm-brand div { display: grid; line-height: 1.25; }
 .mm-brand strong {
-  font-family: 'Syne', system-ui, sans-serif;
+  font-family: 'Montserrat', system-ui, sans-serif;
   font-size: 0.9rem; font-weight: 800; color: #fff;
 }
 .mm-brand small {
+  font-family: 'DM Sans', system-ui, sans-serif;
   font-size: 0.58rem; color: var(--gold);
-  letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
 }
 .mm-close {
   width: 44px; height: 44px; display: grid; place-items: center;
